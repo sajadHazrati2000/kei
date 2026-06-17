@@ -1,0 +1,53 @@
+{
+  "APP": {
+    "TITLE": "کی — زمان‌بندی تیم",
+    "LOADING": "در حال بارگذاری..."
+  },
+  "NAV": {
+    "DASHBOARD": "داشبورد",
+    "AVAILABILITY": "زمان‌بندی من",
+    "SETTINGS": "تنظیمات",
+    "LOGOUT": "خروج"
+  },
+  "AUTH": {
+    "LOGIN": "ورود",
+    "EMAIL": "ایمیل",
+    "PASSWORD": "رمز عبور",
+    "REMEMBER_ME": "مرا به خاطر بسپار",
+    "FORGOT_PASSWORD": "رمز عبور را فراموش کردید؟",
+    "SETUP_TITLE": "سازمان خود را تنظیم کنید",
+    "SETUP_ORG_NAME": "نام سازمان",
+    "SETUP_ADMIN_NAME": "نام شما",
+    "SETUP_SUBMIT": "شروع کنید"
+  },
+  "AVAILABILITY": {
+    "TITLE": "زمان‌بندی من",
+    "FREE": "آزاد",
+    "BUSY": "مشغول",
+    "FOCUS": "تمرکز",
+    "WEEK_OF": "هفته {{date}}",
+    "SAVE": "ذخیره",
+    "TEMPLATE": "قالب‌ها"
+  },
+  "DASHBOARD": {
+    "TITLE": "داشبورد تیم",
+    "OVERLAP": "ساعات مشترک",
+    "NO_MEMBERS": "هیچ عضوی یافت نشد."
+  },
+  "SETTINGS": {
+    "TITLE": "تنظیمات",
+    "TIMEZONE": "منطقه زمانی",
+    "LANGUAGE": "زبان",
+    "CALENDAR": "تقویم",
+    "GREGORIAN": "میلادی",
+    "JALALI": "شمسی",
+    "SAVE": "ذخیره تنظیمات",
+    "SAVED": "تنظیمات ذخیره شد"
+  },
+  "ERRORS": {
+    "GENERIC": "مشکلی پیش آمد. لطفاً دوباره تلاش کنید.",
+    "UNAUTHORIZED": "اطلاعات ورود نادرست است.",
+    "FORBIDDEN": "شما اجازه انجام این کار را ندارید.",
+    "NOT_FOUND": "منبع پیدا نشد."
+  }
+}

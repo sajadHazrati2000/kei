@@ -1,0 +1,53 @@
+{
+  "APP": {
+    "TITLE": "Kei — Team Scheduling",
+    "LOADING": "Loading..."
+  },
+  "NAV": {
+    "DASHBOARD": "Dashboard",
+    "AVAILABILITY": "My Availability",
+    "SETTINGS": "Settings",
+    "LOGOUT": "Sign Out"
+  },
+  "AUTH": {
+    "LOGIN": "Sign In",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "REMEMBER_ME": "Remember me",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "SETUP_TITLE": "Set up your organization",
+    "SETUP_ORG_NAME": "Organization name",
+    "SETUP_ADMIN_NAME": "Your name",
+    "SETUP_SUBMIT": "Get started"
+  },
+  "AVAILABILITY": {
+    "TITLE": "My Availability",
+    "FREE": "Free",
+    "BUSY": "Busy",
+    "FOCUS": "Focus",
+    "WEEK_OF": "Week of {{date}}",
+    "SAVE": "Save",
+    "TEMPLATE": "Templates"
+  },
+  "DASHBOARD": {
+    "TITLE": "Team Dashboard",
+    "OVERLAP": "Core hours",
+    "NO_MEMBERS": "No team members found."
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "TIMEZONE": "Timezone",
+    "LANGUAGE": "Language",
+    "CALENDAR": "Calendar",
+    "GREGORIAN": "Gregorian",
+    "JALALI": "Jalali (Solar Hijri)",
+    "SAVE": "Save settings",
+    "SAVED": "Settings saved"
+  },
+  "ERRORS": {
+    "GENERIC": "Something went wrong. Please try again.",
+    "UNAUTHORIZED": "Invalid credentials.",
+    "FORBIDDEN": "You do not have permission to do this.",
+    "NOT_FOUND": "Resource not found."
+  }
+}
