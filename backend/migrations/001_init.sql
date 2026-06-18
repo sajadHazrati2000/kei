@@ -1,5 +1,6 @@
 -- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "btree_gist";
 
 -- organizations
 CREATE TABLE organizations (
@@ -95,3 +96,14 @@ CREATE TABLE audit_log (
 
 CREATE INDEX idx_audit_log_org_id ON audit_log(org_id);
 CREATE INDEX idx_audit_log_created_at ON audit_log(created_at DESC);
+
+-- refresh_tokens
+CREATE TABLE refresh_tokens (
+    id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id    UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    jti        TEXT NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
