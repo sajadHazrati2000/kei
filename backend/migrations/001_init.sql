@@ -4,13 +4,17 @@ CREATE EXTENSION IF NOT EXISTS "btree_gist";
 
 -- organizations
 CREATE TABLE organizations (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name        TEXT NOT NULL,
-    slug        TEXT NOT NULL UNIQUE,
-    timezone    TEXT NOT NULL DEFAULT 'UTC',
-    overlap_start TIMETZ NOT NULL DEFAULT '09:00+00',
-    overlap_end   TIMETZ NOT NULL DEFAULT '17:00+00',
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name             TEXT NOT NULL,
+    slug             TEXT NOT NULL UNIQUE,
+    timezone         TEXT NOT NULL DEFAULT 'UTC',
+    overlap_start    TIMETZ NOT NULL DEFAULT '09:00+00',
+    overlap_end      TIMETZ NOT NULL DEFAULT '17:00+00',
+    default_language TEXT  NOT NULL DEFAULT 'en',
+    working_days     INT[] NOT NULL DEFAULT '{1,2,3,4,5}',
+    working_start    TIMETZ NOT NULL DEFAULT '09:00+00',
+    working_end      TIMETZ NOT NULL DEFAULT '17:00+00',
+    created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- users

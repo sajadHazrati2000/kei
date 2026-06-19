@@ -7,6 +7,7 @@ import (
 	authpkg "github.com/sajadHazrati2000/kei/backend/internal/auth"
 	"github.com/sajadHazrati2000/kei/backend/internal/middleware"
 	"github.com/sajadHazrati2000/kei/backend/internal/realtime"
+	"github.com/sajadHazrati2000/kei/backend/internal/settings"
 	"github.com/sajadHazrati2000/kei/backend/internal/user"
 )
 
@@ -43,6 +44,14 @@ func (s *Server) registerRoutes() {
 	// Team
 	s.mux.Handle("GET /api/v1/team/availability", requireAuth(http.HandlerFunc(avh.HandleTeamAvailability)))
 	s.mux.Handle("GET /api/v1/team/overlap", requireAuth(http.HandlerFunc(avh.HandleTeamOverlap)))
+
+	// Settings
+	sh := settings.NewHandler(s.settingsSvc)
+	s.mux.Handle("GET /api/v1/settings", requireAuth(http.HandlerFunc(sh.HandleGetSettings)))
+	s.mux.Handle("PUT /api/v1/settings", requireAuth(adminOnly(http.HandlerFunc(sh.HandleUpdateSettings))))
+	s.mux.Handle("GET /api/v1/settings/blocked-days", requireAuth(http.HandlerFunc(sh.HandleListBlockedDays)))
+	s.mux.Handle("POST /api/v1/settings/blocked-days", requireAuth(adminOnly(http.HandlerFunc(sh.HandleAddBlockedDay))))
+	s.mux.Handle("DELETE /api/v1/settings/blocked-days/{date}", requireAuth(adminOnly(http.HandlerFunc(sh.HandleDeleteBlockedDay))))
 
 	// WebSocket — auth via ?token= query param (cookies unavailable during WS handshake)
 	wsh := realtime.NewWSHandler(s.hub, s.cfg.JWTSecret, s.cfg.CORSOrigin, s.teamSnapshotFn)

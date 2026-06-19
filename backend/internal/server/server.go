@@ -12,17 +12,19 @@ import (
 	"github.com/sajadHazrati2000/kei/backend/internal/availability"
 	"github.com/sajadHazrati2000/kei/backend/internal/config"
 	"github.com/sajadHazrati2000/kei/backend/internal/realtime"
+	"github.com/sajadHazrati2000/kei/backend/internal/settings"
 	"github.com/sajadHazrati2000/kei/backend/internal/user"
 )
 
 type Server struct {
-	cfg      *config.Config
-	pool     *pgxpool.Pool
-	mux      *http.ServeMux
-	authSvc  *auth.Service
-	userSvc  *user.Service
-	availSvc *availability.Service
-	hub      *realtime.HubRegistry
+	cfg         *config.Config
+	pool        *pgxpool.Pool
+	mux         *http.ServeMux
+	authSvc     *auth.Service
+	userSvc     *user.Service
+	availSvc    *availability.Service
+	settingsSvc *settings.Service
+	hub         *realtime.HubRegistry
 }
 
 func New(cfg *config.Config, pool *pgxpool.Pool) *Server {
@@ -35,16 +37,20 @@ func New(cfg *config.Config, pool *pgxpool.Pool) *Server {
 	availRepo := availability.NewRepository(pool)
 	availSvc := availability.NewService(availRepo)
 
+	settingsRepo := settings.NewRepository(pool)
+	settingsSvc := settings.NewService(settingsRepo)
+
 	hub := realtime.NewHubRegistry()
 
 	s := &Server{
-		cfg:      cfg,
-		pool:     pool,
-		mux:      http.NewServeMux(),
-		authSvc:  authSvc,
-		userSvc:  userSvc,
-		availSvc: availSvc,
-		hub:      hub,
+		cfg:         cfg,
+		pool:        pool,
+		mux:         http.NewServeMux(),
+		authSvc:     authSvc,
+		userSvc:     userSvc,
+		availSvc:    availSvc,
+		settingsSvc: settingsSvc,
+		hub:         hub,
 	}
 	s.registerRoutes()
 	return s
