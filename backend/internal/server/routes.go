@@ -6,6 +6,7 @@ import (
 	"github.com/sajadHazrati2000/kei/backend/internal/availability"
 	authpkg "github.com/sajadHazrati2000/kei/backend/internal/auth"
 	"github.com/sajadHazrati2000/kei/backend/internal/middleware"
+	"github.com/sajadHazrati2000/kei/backend/internal/realtime"
 	"github.com/sajadHazrati2000/kei/backend/internal/user"
 )
 
@@ -32,10 +33,7 @@ func (s *Server) registerRoutes() {
 	s.mux.Handle("DELETE /api/v1/users/{id}", requireAuth(adminOnly(http.HandlerFunc(uh.HandleDeactivate))))
 
 	// Availability — per-user
-	// Note: /recurring and /import must be registered before /{user_id} to avoid
-	// the wildcard capturing the literal path segments as IDs. They are separate
-	// from the /{user_id} patterns because they carry an additional segment.
-	avh := availability.NewHandler(s.availSvc)
+	avh := availability.NewHandler(s.availSvc, s.hub)
 	s.mux.Handle("GET /api/v1/availability/{user_id}", requireAuth(http.HandlerFunc(avh.HandleGetSlots)))
 	s.mux.Handle("PUT /api/v1/availability/{user_id}", requireAuth(http.HandlerFunc(avh.HandleSetSlots)))
 	s.mux.Handle("GET /api/v1/availability/{user_id}/recurring", requireAuth(http.HandlerFunc(avh.HandleGetTemplates)))
@@ -45,6 +43,10 @@ func (s *Server) registerRoutes() {
 	// Team
 	s.mux.Handle("GET /api/v1/team/availability", requireAuth(http.HandlerFunc(avh.HandleTeamAvailability)))
 	s.mux.Handle("GET /api/v1/team/overlap", requireAuth(http.HandlerFunc(avh.HandleTeamOverlap)))
+
+	// WebSocket — auth via ?token= query param (cookies unavailable during WS handshake)
+	wsh := realtime.NewWSHandler(s.hub, s.cfg.JWTSecret, s.cfg.CORSOrigin, s.teamSnapshotFn)
+	s.mux.Handle("GET /ws/availability", wsh)
 }
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {

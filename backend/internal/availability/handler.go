@@ -7,14 +7,16 @@ import (
 	"time"
 
 	"github.com/sajadHazrati2000/kei/backend/internal/middleware"
+	"github.com/sajadHazrati2000/kei/backend/internal/realtime"
 )
 
 type Handler struct {
 	svc *Service
+	hub *realtime.HubRegistry // nil → no broadcast (WS optional)
 }
 
-func NewHandler(svc *Service) *Handler {
-	return &Handler{svc: svc}
+func NewHandler(svc *Service, hub *realtime.HubRegistry) *Handler {
+	return &Handler{svc: svc, hub: hub}
 }
 
 // HandleGetSlots — GET /api/v1/availability/{user_id}?from=&to=
@@ -67,6 +69,18 @@ func (h *Handler) HandleSetSlots(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to set slots", "INTERNAL_ERROR")
 		return
 	}
+
+	// Broadcast to any connected WebSocket clients in this org (best-effort).
+	if h.hub != nil {
+		if msg, err := json.Marshal(map[string]any{
+			"type":    "availability_update",
+			"user_id": targetID,
+			"slots":   slots,
+		}); err == nil {
+			h.hub.Broadcast(claims.OrgID, msg)
+		}
+	}
+
 	writeJSON(w, http.StatusOK, map[string]any{"data": slots, "total": len(slots)})
 }
 
