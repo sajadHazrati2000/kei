@@ -23,6 +23,8 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("POST /api/v1/auth/login", ah.HandleLogin)
 	s.mux.HandleFunc("POST /api/v1/auth/refresh", ah.HandleRefresh)
 	s.mux.HandleFunc("DELETE /api/v1/auth/logout", ah.HandleLogout)
+	s.mux.HandleFunc("POST /api/v1/auth/password-reset/request", ah.HandlePasswordResetRequest)
+	s.mux.HandleFunc("POST /api/v1/auth/password-reset/confirm", ah.HandlePasswordResetConfirm)
 
 	// Users
 	uh := user.NewHandler(s.userSvc)

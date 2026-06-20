@@ -2,17 +2,21 @@ package auth
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 var (
-	ErrSetupDone    = errors.New("setup already completed")
-	ErrInvalidCreds = errors.New("invalid credentials")
-	ErrInactiveUser = errors.New("account is inactive")
-	ErrInvalidToken = errors.New("invalid or expired token")
+	ErrSetupDone        = errors.New("setup already completed")
+	ErrInvalidCreds     = errors.New("invalid credentials")
+	ErrInactiveUser     = errors.New("account is inactive")
+	ErrInvalidToken     = errors.New("invalid or expired token")
+	ErrResetTokenInvalid = errors.New("invalid, expired, or already-used reset token")
 )
 
 type Service struct {
@@ -111,6 +115,52 @@ func (s *Service) Logout(ctx context.Context, tokenStr string) error {
 		return nil
 	}
 	return s.repo.DeleteRefreshToken(ctx, claims.ID)
+}
+
+// RequestPasswordReset generates a 1-hour reset token for the given email and
+// stores it. Returns the token string (empty when email is not found so the
+// handler can always respond 200 without leaking whether the address exists).
+func (s *Service) RequestPasswordReset(ctx context.Context, email string) (string, error) {
+	user, err := s.repo.GetUserByEmail(ctx, email)
+	if err != nil {
+		return "", fmt.Errorf("auth.Service.RequestPasswordReset: %w", err)
+	}
+	if user == nil || !user.IsActive {
+		return "", nil // unknown email — return empty token, caller always 200s
+	}
+
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {
+		return "", fmt.Errorf("auth.Service.RequestPasswordReset: generate token: %w", err)
+	}
+	token := hex.EncodeToString(b)
+
+	if err := s.repo.CreatePasswordResetToken(ctx, user.ID, token, time.Now().Add(time.Hour)); err != nil {
+		return "", fmt.Errorf("auth.Service.RequestPasswordReset: %w", err)
+	}
+	return token, nil
+}
+
+// ConfirmPasswordReset validates the token, hashes the new password, and
+// atomically updates the user record while invalidating all existing sessions.
+func (s *Service) ConfirmPasswordReset(ctx context.Context, token, newPassword string) error {
+	rt, err := s.repo.GetPasswordResetToken(ctx, token)
+	if err != nil {
+		return fmt.Errorf("auth.Service.ConfirmPasswordReset: %w", err)
+	}
+	if rt == nil || rt.UsedAt != nil || time.Now().After(rt.ExpiresAt) {
+		return ErrResetTokenInvalid
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("auth.Service.ConfirmPasswordReset: hash: %w", err)
+	}
+
+	if err := s.repo.ConfirmPasswordReset(ctx, token, rt.UserID, string(hash)); err != nil {
+		return fmt.Errorf("auth.Service.ConfirmPasswordReset: %w", err)
+	}
+	return nil
 }
 
 func (s *Service) issueTokens(ctx context.Context, user *User) (*TokenResponse, error) {

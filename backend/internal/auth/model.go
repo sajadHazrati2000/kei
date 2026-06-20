@@ -48,3 +48,19 @@ type RefreshToken struct {
 	UserID    string
 	ExpiresAt time.Time
 }
+
+type PasswordResetToken struct {
+	UserID    string
+	Token     string
+	ExpiresAt time.Time
+	UsedAt    *time.Time
+}
+
+type PasswordResetRequest struct {
+	Email string `json:"email"`
+}
+
+type PasswordResetConfirmRequest struct {
+	Token       string `json:"token"`
+	NewPassword string `json:"new_password"`
+}

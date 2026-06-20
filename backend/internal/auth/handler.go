@@ -84,6 +84,48 @@ func (h *Handler) HandleRefresh(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{"user": resp.UserInfo})
 }
 
+// HandlePasswordResetRequest — POST /api/v1/auth/password-reset/request
+// Always returns 200 to prevent user-enumeration. The reset token is included
+// in the response body so an admin can deliver it manually (no SMTP).
+func (h *Handler) HandlePasswordResetRequest(w http.ResponseWriter, r *http.Request) {
+	var req PasswordResetRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body", "BAD_REQUEST")
+		return
+	}
+
+	token, err := h.svc.RequestPasswordReset(r.Context(), req.Email)
+	if err != nil {
+		// Log internally but still return 200 — don't expose server errors.
+		writeJSON(w, http.StatusOK, map[string]any{"token": ""})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"token": token})
+}
+
+// HandlePasswordResetConfirm — POST /api/v1/auth/password-reset/confirm
+func (h *Handler) HandlePasswordResetConfirm(w http.ResponseWriter, r *http.Request) {
+	var req PasswordResetConfirmRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body", "BAD_REQUEST")
+		return
+	}
+	if req.Token == "" || len(req.NewPassword) < 8 {
+		writeError(w, http.StatusBadRequest, "token and new_password (min 8 chars) are required", "MISSING_FIELDS")
+		return
+	}
+
+	if err := h.svc.ConfirmPasswordReset(r.Context(), req.Token, req.NewPassword); err != nil {
+		if errors.Is(err, ErrResetTokenInvalid) {
+			writeError(w, http.StatusBadRequest, "invalid, expired, or already-used reset token", "INVALID_RESET_TOKEN")
+			return
+		}
+		writeError(w, http.StatusInternalServerError, "password reset failed", "INTERNAL_ERROR")
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"message": "password updated successfully"})
+}
+
 func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
 	if cookie, err := r.Cookie("refresh_token"); err == nil {
 		h.svc.Logout(r.Context(), cookie.Value)

@@ -124,3 +124,76 @@ func (r *Repository) DeleteRefreshToken(ctx context.Context, jti string) error {
 	}
 	return nil
 }
+
+// CreatePasswordResetToken stores a new reset token for the given user.
+func (r *Repository) CreatePasswordResetToken(ctx context.Context, userID, token string, expiresAt time.Time) error {
+	_, err := r.pool.Exec(ctx,
+		`INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)`,
+		userID, token, expiresAt,
+	)
+	if err != nil {
+		return fmt.Errorf("auth.Repository.CreatePasswordResetToken: %w", err)
+	}
+	return nil
+}
+
+// GetPasswordResetToken fetches a token record by token string.
+// Returns nil, nil when not found.
+func (r *Repository) GetPasswordResetToken(ctx context.Context, token string) (*PasswordResetToken, error) {
+	rt := &PasswordResetToken{}
+	err := r.pool.QueryRow(ctx,
+		`SELECT user_id, token, expires_at, used_at
+		 FROM password_reset_tokens WHERE token = $1`,
+		token,
+	).Scan(&rt.UserID, &rt.Token, &rt.ExpiresAt, &rt.UsedAt)
+	if err == pgx.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("auth.Repository.GetPasswordResetToken: %w", err)
+	}
+	return rt, nil
+}
+
+// ConfirmPasswordReset runs three steps atomically:
+//  1. Marks the token as used (fails if already used — 0 rows affected).
+//  2. Updates the user's password hash.
+//  3. Deletes all refresh tokens for that user, invalidating all sessions.
+func (r *Repository) ConfirmPasswordReset(ctx context.Context, token, userID, passwordHash string) error {
+	tx, err := r.pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("auth.Repository.ConfirmPasswordReset: begin: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	tag, err := tx.Exec(ctx,
+		`UPDATE password_reset_tokens SET used_at = NOW()
+		 WHERE token = $1 AND used_at IS NULL`,
+		token,
+	)
+	if err != nil {
+		return fmt.Errorf("auth.Repository.ConfirmPasswordReset: mark used: %w", err)
+	}
+	if tag.RowsAffected() == 0 {
+		return ErrResetTokenInvalid
+	}
+
+	if _, err := tx.Exec(ctx,
+		`UPDATE users SET password_hash = $1 WHERE id = $2`,
+		passwordHash, userID,
+	); err != nil {
+		return fmt.Errorf("auth.Repository.ConfirmPasswordReset: update password: %w", err)
+	}
+
+	if _, err := tx.Exec(ctx,
+		`DELETE FROM refresh_tokens WHERE user_id = $1`,
+		userID,
+	); err != nil {
+		return fmt.Errorf("auth.Repository.ConfirmPasswordReset: delete sessions: %w", err)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("auth.Repository.ConfirmPasswordReset: commit: %w", err)
+	}
+	return nil
+}
