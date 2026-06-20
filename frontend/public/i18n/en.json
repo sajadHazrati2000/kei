@@ -46,7 +46,8 @@
     "FOCUS": "Focus",
     "WEEK_OF": "Week of {{date}}",
     "SAVE": "Save",
-    "TEMPLATE": "Templates"
+    "TEMPLATE": "Templates",
+    "LABEL_PLACEHOLDER": "Add a label (optional)"
   },
   "DASHBOARD": {
     "TITLE": "Team Dashboard",

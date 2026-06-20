@@ -290,7 +290,7 @@ Build in this order — each step is independently testable:
 8. ✅ Settings: working hours, blocked days
 9. ✅ Angular: project scaffold + i18n + RTL setup
 10. ✅ Angular: auth pages (login, setup wizard)
-11. Angular: availability grid component
+11. ✅ Angular: availability grid component
 12. Angular: team dashboard
 13. Angular: settings pages
 14. Angular: WebSocket integration
@@ -316,6 +316,15 @@ At the start of every Claude Code session:
 - **Interceptor** — `authInterceptor` adds `withCredentials: true` to every request; on 401 from non-auth endpoints, clears session and navigates to `/login`.
 - **Form overrides** — `src/styles/_forms.scss` remaps Angular Material MDC CSS variables to dark tokens. No `!important` except on the text-field background.
 
-*Last updated: Step 10 complete — auth pages, AuthService, guards, interceptor, form styles*  
-*Next: Step 11 — Angular availability grid component*  
+## Availability Grid (Step 11)
+
+- **Slot time format sent to backend:** ISO 8601 UTC (`2026-06-16T09:00:00.000Z`). Frontend never sends local times.
+- **JalaliPipe** is at `src/app/shared/pipes/jalali.pipe.ts`. Usage: `{{ date | jalali }}` → Jalali string when `fa-IR`, Gregorian (Intl) when `en-US`. Always use it alongside Angular's `date` pipe for dual-calendar display.
+- **Inline editing pattern:** No modals anywhere. Clicking an empty grid cell shows `SlotCreatorComponent` absolutely positioned at that time. Clicking an existing `SlotBlockComponent` sets `editingSlotId` signal which activates the edit/delete action buttons inline. `Escape` key closes both states.
+- **Drag-resize** uses `PointerEvent` API (`setPointerCapture` / `releasePointerCapture`) so it works on both mouse and touch without separate handlers.
+- **RTL:** `timeline-scroll` has `direction: ltr` always (time flows left-to-right universally). The week-strip and day-panel use `border-inline-end` / `inset-inline-end` for logical RTL layout.
+- **Grid geometry:** `ROW_H = 24px` per 30-minute row → 24 hours × 2 × 24px = 1152px total height.
+
+*Last updated: Step 11 complete — availability grid, JalaliPipe, WeekNavigator, SlotBlock, SlotCreator*  
+*Next: Step 12 — Angular team dashboard*  
 *Next phase: Phase 2 — Meeting Proposals (do not start until Phase 1 is fully tested)*

@@ -46,7 +46,8 @@
     "FOCUS": "تمرکز",
     "WEEK_OF": "هفته {{date}}",
     "SAVE": "ذخیره",
-    "TEMPLATE": "قالب‌ها"
+    "TEMPLATE": "قالب‌ها",
+    "LABEL_PLACEHOLDER": "برچسب اضافه کنید (اختیاری)"
   },
   "DASHBOARD": {
     "TITLE": "داشبورد تیم",

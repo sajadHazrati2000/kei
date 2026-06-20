@@ -1,0 +1,97 @@
+<div class="my-week">
+
+  <!-- ── Left: week strip ──────────────────────────────────────────────────── -->
+  <aside class="week-strip" aria-label="Week navigation">
+
+    <app-week-navigator
+      [weekStart]="weekStart()"
+      (weekChange)="onWeekChange($event)"
+    />
+
+    <div class="day-list" role="list">
+      @for (day of weekDays(); track day.date.getTime()) {
+        <button
+          class="day-btn"
+          role="listitem"
+          [class.day-btn--selected]="isSameDay(day.date, selectedDate())"
+          [class.day-btn--weekend]="isWeekend(day.date)"
+          (click)="selectDay(day.date)"
+          [attr.aria-pressed]="isSameDay(day.date, selectedDate())"
+          [attr.aria-label]="day.date | date:'EEEE, MMMM d'"
+          type="button"
+        >
+          <span class="day-btn__weekday">{{ day.date | date:'EEE' }}</span>
+          <span class="day-btn__num">{{ day.date | date:'d' }}</span>
+          @if (theme.isRTL) {
+            <span class="day-btn__jalali">{{ day.date | jalali:'d' }}</span>
+          }
+          <span class="day-dot day-dot--{{ day.dot }}" aria-hidden="true"></span>
+        </button>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="week-strip__loading" aria-busy="true">{{ 'APP.LOADING' | translate }}</div>
+    }
+  </aside>
+
+  <!-- ── Right: day timeline ───────────────────────────────────────────────── -->
+  <section class="day-panel" aria-label="Day timeline">
+
+    <header class="day-panel__header">
+      <h2 class="day-panel__date">
+        {{ selectedDate() | date:'EEEE, MMMM d, yyyy' }}
+        @if (theme.isRTL) {
+          <span class="day-panel__jalali"> · {{ selectedDate() | jalali:'d MMMM yyyy' }}</span>
+        }
+      </h2>
+    </header>
+
+    <div
+      class="timeline-scroll"
+      (click)="onGridClick($event)"
+      (keydown.escape)="closeCreator()"
+      tabindex="0"
+      [attr.aria-label]="'AVAILABILITY.TITLE' | translate"
+    >
+      <div class="timeline-grid" [style.height.px]="hours.length * rowH * 2">
+
+        <!-- Hour labels -->
+        @for (h of hours; track h) {
+          <div class="hour-label" [style.top.px]="h * rowH * 2">
+            {{ formatH(h) }}
+          </div>
+        }
+
+        <!-- Half-hour grid lines -->
+        @for (h of hours; track h) {
+          <div class="grid-line grid-line--hour"   [style.top.px]="h * rowH * 2"></div>
+          <div class="grid-line grid-line--half"   [style.top.px]="h * rowH * 2 + rowH"></div>
+        }
+
+        <!-- Slot blocks -->
+        @for (slot of daySlots(); track slot.id) {
+          <app-slot-block
+            [slot]="slot"
+            [isEditing]="editingSlotId() === slot.id"
+            (edit)="editSlot($event)"
+            (delete)="deleteSlot($event)"
+            (resize)="resizeSlot($event)"
+          />
+        }
+
+        <!-- Slot creator (inline, no modal) -->
+        @if (creatorAt() !== null) {
+          <app-slot-creator
+            [forDate]="selectedDate()"
+            [startHour]="creatorAt()!.hour"
+            [startMinute]="creatorAt()!.minute"
+            (created)="onSlotCreated($event)"
+            (cancelled)="closeCreator()"
+          />
+        }
+
+      </div>
+    </div>
+  </section>
+</div>

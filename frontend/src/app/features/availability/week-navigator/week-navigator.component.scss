@@ -1,0 +1,45 @@
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 4px;
+}
+
+.week-nav__btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--kei-radius-sm);
+  border: 1px solid var(--kei-border);
+  background: transparent;
+  color: var(--kei-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--kei-transition), color var(--kei-transition);
+
+  &:hover {
+    background-color: var(--kei-accent-glow);
+    color: var(--kei-text-primary);
+  }
+}
+
+.week-nav__label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.week-nav__gregorian {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kei-text-primary);
+  white-space: nowrap;
+}
+
+.week-nav__jalali {
+  font-size: 11px;
+  color: var(--kei-text-secondary);
+  white-space: nowrap;
+}
