@@ -49,6 +49,17 @@ export const KEI_ICONS: Record<string, string> = {
     `<path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>`
   ),
 
+  'check': icon(
+    `<path d="M5 12l5 5l10 -10"/>`
+  ),
+
+  'loader': icon(
+    `<path d="M12 6l0 -3"/><path d="M16.25 7.75l2.15 -2.15"/>` +
+    `<path d="M18 12l3 0"/><path d="M16.25 16.25l2.15 2.15"/>` +
+    `<path d="M12 18l0 3"/><path d="M7.75 16.25l-2.15 2.15"/>` +
+    `<path d="M6 12l-3 0"/><path d="M7.75 7.75l-2.15 -2.15"/>`
+  ),
+
   'language': icon(
     `<path d="M9 6.371c0 4.418 -2.239 6.629 -5 6.629"/>` +
     `<path d="M4 6.371h7"/>` +

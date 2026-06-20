@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { AppShellComponent } from './shared/components/shell/app-shell.component';
+import { RouterOutlet } from '@angular/router';
 import { KeiThemeService } from './core/services/kei-theme.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AppShellComponent],
-  template: `<app-shell />`,
+  imports: [RouterOutlet],
+  // AppShellComponent is now a layout route; AppComponent is just the root outlet.
+  template: `<router-outlet />`,
 })
 export class AppComponent {
-  // Injecting KeiThemeService here ensures it is instantiated at bootstrap,
-  // which restores the saved locale (dir + lang) before the first render.
+  // Injecting KeiThemeService ensures locale/dir is applied at bootstrap.
   private readonly _theme = inject(KeiThemeService);
 }

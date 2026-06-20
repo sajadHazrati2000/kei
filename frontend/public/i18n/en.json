@@ -11,6 +11,7 @@
   },
   "AUTH": {
     "LOGIN": "Sign In",
+    "SIGN_IN_TITLE": "Sign in to Kei",
     "EMAIL": "Email",
     "PASSWORD": "Password",
     "REMEMBER_ME": "Remember me",
@@ -18,7 +19,25 @@
     "SETUP_TITLE": "Set up your organization",
     "SETUP_ORG_NAME": "Organization name",
     "SETUP_ADMIN_NAME": "Your name",
-    "SETUP_SUBMIT": "Get started"
+    "SETUP_SUBMIT": "Create account"
+  },
+  "SETUP": {
+    "ORG_TITLE": "Your organization",
+    "ADMIN_TITLE": "Admin account",
+    "DONE_TITLE": "You're all set!",
+    "DONE_DESC": "Your Kei workspace is ready. Sign in to get started.",
+    "GO_TO_KEI": "Go to Kei",
+    "ORG_NAME": "Organization name",
+    "WORK_START": "Work day starts",
+    "WORK_END": "Work day ends",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "NEXT": "Next",
+    "BACK": "Back",
+    "STEPS": "Setup steps",
+    "STRENGTH_WEAK": "Weak",
+    "STRENGTH_FAIR": "Fair",
+    "STRENGTH_GOOD": "Good",
+    "STRENGTH_STRONG": "Strong"
   },
   "AVAILABILITY": {
     "TITLE": "My Availability",
@@ -48,6 +67,11 @@
     "GENERIC": "Something went wrong. Please try again.",
     "UNAUTHORIZED": "Invalid credentials.",
     "FORBIDDEN": "You do not have permission to do this.",
-    "NOT_FOUND": "Resource not found."
+    "NOT_FOUND": "Resource not found.",
+    "FIELD_REQUIRED": "This field is required.",
+    "INVALID_EMAIL": "Enter a valid email address.",
+    "PASSWORD_MIN": "Password must be at least 8 characters.",
+    "PASSWORDS_MISMATCH": "Passwords do not match.",
+    "SETUP_DONE": "This Kei instance is already set up. Please sign in."
   }
 }

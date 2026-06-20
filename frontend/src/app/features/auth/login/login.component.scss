@@ -1,0 +1,82 @@
+.login-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--kei-bg-base);
+  padding: 24px;
+}
+
+.login-card {
+  width: 380px;
+  max-width: 100%;
+  background-color: var(--kei-bg-surface);
+  border: 1px solid var(--kei-border);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.login-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--kei-radius-lg);
+  background-color: var(--kei-accent-glow);
+  border: 1px solid var(--kei-accent-border);
+  color: var(--kei-accent);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.login-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--kei-text-primary);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.login-field {
+  width: 100%;
+}
+
+.login-error {
+  color: var(--kei-busy-text);
+  font-size: 13px;
+  margin: 4px 0 8px;
+  text-align: center;
+}
+
+.login-submit {
+  width: 100%;
+  height: 40px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.login-spinner {
+  color: currentColor;
+  animation: kei-spin 1s linear infinite;
+}
+
+@keyframes kei-spin {
+  to { transform: rotate(360deg); }
+}

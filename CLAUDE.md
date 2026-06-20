@@ -288,8 +288,8 @@ Build in this order — each step is independently testable:
 6. ✅ Team dashboard API: all members' availability + overlap calculation
 7. ✅ WebSocket: real-time availability broadcast
 8. ✅ Settings: working hours, blocked days
-9. ✅ Angular: project scaffold + i18n + RTL setup (this session)
-10. Angular: auth pages (login, setup wizard)
+9. ✅ Angular: project scaffold + i18n + RTL setup
+10. ✅ Angular: auth pages (login, setup wizard)
 11. Angular: availability grid component
 12. Angular: team dashboard
 13. Angular: settings pages
@@ -308,6 +308,14 @@ At the start of every Claude Code session:
 
 ---
 
-*Last updated: Step 9 complete — Angular scaffold, design system, shell layout, KeiThemeService, i18n, RTL*  
-*Next: Step 10 — Angular auth pages (login + setup wizard)*  
+## Auth Flow (Step 10)
+
+- **Cookie-based** — access token in httpOnly cookie, set by backend on login/setup. Frontend stores nothing in localStorage.
+- **Session rehydration** — `APP_INITIALIZER` calls `GET /api/v1/users/me`; if 401, session is cleared and guards redirect to `/login`.
+- **Guards:** `authGuard` (protect shell routes), `noAuthGuard` (prevent logged-in users hitting `/login`), `setupGuard` (check `GET /api/v1/auth/setup/status`; redirect to `/login` if setup done).
+- **Interceptor** — `authInterceptor` adds `withCredentials: true` to every request; on 401 from non-auth endpoints, clears session and navigates to `/login`.
+- **Form overrides** — `src/styles/_forms.scss` remaps Angular Material MDC CSS variables to dark tokens. No `!important` except on the text-field background.
+
+*Last updated: Step 10 complete — auth pages, AuthService, guards, interceptor, form styles*  
+*Next: Step 11 — Angular availability grid component*  
 *Next phase: Phase 2 — Meeting Proposals (do not start until Phase 1 is fully tested)*

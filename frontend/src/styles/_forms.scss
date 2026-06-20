@@ -1,0 +1,89 @@
+// ─── Angular Material Form Field Dark Theme Overrides ────────────────────────
+// MDC-based Material components (v17+) expose CSS custom properties for
+// styling. We remap them to Kei design tokens so every form field matches
+// the dark shell without any white fills or default grey backgrounds.
+
+// Outlined text fields
+.mat-mdc-form-field {
+  // Borders
+  --mdc-outlined-text-field-outline-color:          var(--kei-border);
+  --mdc-outlined-text-field-hover-outline-color:    var(--kei-border-hover);
+  --mdc-outlined-text-field-focus-outline-color:    var(--kei-accent);
+  --mdc-outlined-text-field-error-outline-color:    var(--kei-busy-text);
+
+  // Label
+  --mdc-outlined-text-field-label-text-color:       var(--kei-text-secondary);
+  --mdc-outlined-text-field-hover-label-text-color: var(--kei-text-secondary);
+  --mdc-outlined-text-field-focus-label-text-color: var(--kei-accent);
+  --mdc-outlined-text-field-error-label-text-color: var(--kei-busy-text);
+
+  // Input text
+  --mdc-outlined-text-field-input-text-color:       var(--kei-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--kei-text-muted);
+
+  // Caret
+  --mdc-outlined-text-field-caret-color: var(--kei-accent);
+
+  // Shape
+  --mdc-outlined-text-field-container-shape: var(--kei-radius-md);
+
+  // Container background — the text-field-wrapper background
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--kei-bg-overlay);
+  }
+
+  // Error helper text
+  .mat-mdc-form-field-error {
+    color: var(--kei-busy-text);
+  }
+
+  // Hint text
+  .mat-mdc-form-field-hint {
+    color: var(--kei-text-muted);
+  }
+}
+
+// Select panel (dropdown)
+.mat-mdc-select {
+  --mat-select-trigger-text-color:       var(--kei-text-primary);
+  --mat-select-disabled-trigger-text-color: var(--kei-text-muted);
+  --mat-select-arrow-color:              var(--kei-text-secondary);
+}
+
+.mat-mdc-select-panel {
+  background-color: var(--kei-bg-overlay);
+  border: 1px solid var(--kei-border);
+  border-radius: var(--kei-radius-md);
+}
+
+.mat-mdc-option {
+  color: var(--kei-text-primary);
+
+  &:hover:not(.mdc-list-item--disabled) {
+    background-color: var(--kei-accent-glow);
+  }
+
+  &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+    background-color: var(--kei-accent-glow);
+    color: var(--kei-accent);
+  }
+}
+
+// Buttons
+.mat-mdc-raised-button.kei-btn-primary,
+.mat-mdc-unelevated-button.kei-btn-primary {
+  background-color: var(--kei-accent);
+  color: #000000;
+  font-weight: 600;
+  border-radius: var(--kei-radius-md);
+
+  &:hover:not(:disabled) {
+    background-color: var(--kei-accent-hover);
+  }
+
+  &:disabled {
+    background-color: var(--kei-border);
+    color: var(--kei-text-muted);
+    cursor: not-allowed;
+  }
+}

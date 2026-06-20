@@ -11,6 +11,7 @@
   },
   "AUTH": {
     "LOGIN": "ورود",
+    "SIGN_IN_TITLE": "ورود به کی",
     "EMAIL": "ایمیل",
     "PASSWORD": "رمز عبور",
     "REMEMBER_ME": "مرا به خاطر بسپار",
@@ -18,7 +19,25 @@
     "SETUP_TITLE": "سازمان خود را تنظیم کنید",
     "SETUP_ORG_NAME": "نام سازمان",
     "SETUP_ADMIN_NAME": "نام شما",
-    "SETUP_SUBMIT": "شروع کنید"
+    "SETUP_SUBMIT": "ایجاد حساب"
+  },
+  "SETUP": {
+    "ORG_TITLE": "سازمان شما",
+    "ADMIN_TITLE": "حساب مدیر",
+    "DONE_TITLE": "همه چیز آماده است!",
+    "DONE_DESC": "فضای کاری کی آماده است. برای شروع وارد شوید.",
+    "GO_TO_KEI": "رفتن به کی",
+    "ORG_NAME": "نام سازمان",
+    "WORK_START": "شروع روز کاری",
+    "WORK_END": "پایان روز کاری",
+    "CONFIRM_PASSWORD": "تأیید رمز عبور",
+    "NEXT": "بعدی",
+    "BACK": "قبلی",
+    "STEPS": "مراحل راه‌اندازی",
+    "STRENGTH_WEAK": "ضعیف",
+    "STRENGTH_FAIR": "متوسط",
+    "STRENGTH_GOOD": "خوب",
+    "STRENGTH_STRONG": "قوی"
   },
   "AVAILABILITY": {
     "TITLE": "زمان‌بندی من",
@@ -48,6 +67,11 @@
     "GENERIC": "مشکلی پیش آمد. لطفاً دوباره تلاش کنید.",
     "UNAUTHORIZED": "اطلاعات ورود نادرست است.",
     "FORBIDDEN": "شما اجازه انجام این کار را ندارید.",
-    "NOT_FOUND": "منبع پیدا نشد."
+    "NOT_FOUND": "منبع پیدا نشد.",
+    "FIELD_REQUIRED": "این فیلد الزامی است.",
+    "INVALID_EMAIL": "یک آدرس ایمیل معتبر وارد کنید.",
+    "PASSWORD_MIN": "رمز عبور باید حداقل ۸ کاراکتر باشد.",
+    "PASSWORDS_MISMATCH": "رمزهای عبور مطابقت ندارند.",
+    "SETUP_DONE": "این نمونه کی قبلاً راه‌اندازی شده. لطفاً وارد شوید."
   }
 }

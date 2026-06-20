@@ -17,6 +17,25 @@ func NewHandler(svc *Service) *Handler {
 	return &Handler{svc: svc}
 }
 
+// HandleMe — GET /api/v1/users/me
+// Returns the profile of the currently authenticated user.
+// This is the canonical "who am I?" endpoint used by the frontend to
+// rehydrate the session from an httpOnly cookie on app load.
+func (h *Handler) HandleMe(w http.ResponseWriter, r *http.Request) {
+	claims, _ := middleware.GetClaims(r.Context())
+
+	u, err := h.svc.GetByID(r.Context(), claims.OrgID, claims.UserID)
+	if errors.Is(err, ErrNotFound) || u == nil {
+		writeError(w, http.StatusNotFound, "user not found", "NOT_FOUND")
+		return
+	}
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to get user", "INTERNAL_ERROR")
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"data": u})
+}
+
 // HandleList — GET /api/v1/users
 func (h *Handler) HandleList(w http.ResponseWriter, r *http.Request) {
 	claims, _ := middleware.GetClaims(r.Context())

@@ -33,6 +33,16 @@ func NewService(repo *Repository, jwtSecret, jwtRefreshSecret string) *Service {
 	}
 }
 
+// IsSetupDone returns true when at least one organisation exists in the DB.
+// Used by the frontend setup guard without requiring authentication.
+func (s *Service) IsSetupDone(ctx context.Context) (bool, error) {
+	count, err := s.repo.OrgCount(ctx)
+	if err != nil {
+		return false, fmt.Errorf("auth.Service.IsSetupDone: %w", err)
+	}
+	return count > 0, nil
+}
+
 func (s *Service) Setup(ctx context.Context, req SetupRequest) (*TokenResponse, error) {
 	count, err := s.repo.OrgCount(ctx)
 	if err != nil {

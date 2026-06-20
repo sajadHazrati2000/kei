@@ -1,0 +1,182 @@
+.setup-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--kei-bg-base);
+  padding: 24px;
+}
+
+.setup-card {
+  width: 440px;
+  max-width: 100%;
+  background-color: var(--kei-bg-surface);
+  border: 1px solid var(--kei-border);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.setup-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--kei-radius-lg);
+  background-color: var(--kei-accent-glow);
+  border: 1px solid var(--kei-accent-border);
+  color: var(--kei-accent);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+// Step indicator dots
+.setup-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.setup-step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--kei-border);
+  transition: background-color var(--kei-transition), transform var(--kei-transition);
+
+  &--active {
+    background-color: var(--kei-accent);
+    transform: scale(1.25);
+  }
+
+  &--done {
+    background-color: var(--kei-free-text);
+  }
+}
+
+.setup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--kei-text-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.setup-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setup-field {
+  width: 100%;
+}
+
+.setup-row {
+  display: flex;
+  gap: 12px;
+
+  .setup-field {
+    flex: 1;
+  }
+}
+
+// Password strength bar
+.strength-bar {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+  margin: 4px 0 2px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-segment {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+  background-color: var(--kei-border);
+  transition: background-color var(--kei-transition);
+
+  &.strength--weak   { background-color: var(--kei-busy-text); }
+  &.strength--fair   { background-color: #F0A040; }
+  &.strength--good   { background-color: #58A6FF; }
+  &.strength--strong { background-color: var(--kei-free-text); }
+}
+
+.strength-label {
+  font-size: 11px;
+  margin-bottom: 8px;
+  color: var(--kei-text-muted);
+
+  &.strength--weak   { color: var(--kei-busy-text); }
+  &.strength--fair   { color: #F0A040; }
+  &.strength--good   { color: var(--kei-accent); }
+  &.strength--strong { color: var(--kei-free-text); }
+}
+
+.setup-error {
+  color: var(--kei-busy-text);
+  font-size: 13px;
+  text-align: center;
+  margin: 4px 0;
+}
+
+.setup-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.setup-btn {
+  flex: 1;
+  height: 40px;
+}
+
+.setup-btn-back {
+  flex: 0 0 auto;
+  height: 40px;
+  color: var(--kei-text-secondary);
+  border-color: var(--kei-border);
+}
+
+.setup-spinner {
+  animation: kei-spin 1s linear infinite;
+}
+
+@keyframes kei-spin {
+  to { transform: rotate(360deg); }
+}
+
+// Done state
+.setup-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.setup-done__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--kei-free-bg);
+  border: 1px solid var(--kei-free-text);
+  color: var(--kei-free-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setup-done__desc {
+  color: var(--kei-text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}

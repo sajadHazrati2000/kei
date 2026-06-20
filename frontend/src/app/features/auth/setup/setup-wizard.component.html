@@ -1,0 +1,159 @@
+<div class="setup-page">
+  <div class="setup-card">
+
+    <!-- Logo -->
+    <div class="setup-logo" aria-label="Kei">كي</div>
+
+    <!-- Step indicator -->
+    <div class="setup-steps" role="list" [attr.aria-label]="'SETUP.STEPS' | translate">
+      @for (n of [1, 2, 3]; track n) {
+        <div
+          class="setup-step-dot"
+          role="listitem"
+          [class.setup-step-dot--done]="step() > n"
+          [class.setup-step-dot--active]="step() === n"
+          [attr.aria-current]="step() === n ? 'step' : null"
+        ></div>
+      }
+    </div>
+
+    <!-- ── Step 1: Organisation ───────────────────────────────────────────── -->
+    @if (step() === 1) {
+      <h1 class="setup-title">{{ 'SETUP.ORG_TITLE' | translate }}</h1>
+      <form class="setup-form" [formGroup]="orgForm" (ngSubmit)="next()" novalidate>
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'SETUP.ORG_NAME' | translate }}</mat-label>
+          <input matInput formControlName="orgName" autocomplete="organization" />
+          @if (orgForm.controls.orgName.touched && orgForm.controls.orgName.invalid) {
+            <mat-error>{{ 'ERRORS.FIELD_REQUIRED' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'SETTINGS.TIMEZONE' | translate }}</mat-label>
+          <mat-select formControlName="timezone">
+            @for (tz of timezones; track tz) {
+              <mat-option [value]="tz">{{ tz }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="setup-row">
+          <mat-form-field appearance="outline" class="setup-field">
+            <mat-label>{{ 'SETUP.WORK_START' | translate }}</mat-label>
+            <mat-select formControlName="workingStart">
+              @for (t of timeSlots; track t) {
+                <mat-option [value]="t">{{ t }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="setup-field">
+            <mat-label>{{ 'SETUP.WORK_END' | translate }}</mat-label>
+            <mat-select formControlName="workingEnd">
+              @for (t of timeSlots; track t) {
+                <mat-option [value]="t">{{ t }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <button mat-flat-button type="submit" class="setup-btn kei-btn-primary">
+          {{ 'SETUP.NEXT' | translate }}
+        </button>
+      </form>
+    }
+
+    <!-- ── Step 2: Admin account ─────────────────────────────────────────── -->
+    @if (step() === 2) {
+      <h1 class="setup-title">{{ 'SETUP.ADMIN_TITLE' | translate }}</h1>
+      <form class="setup-form" [formGroup]="adminForm" (ngSubmit)="next()" novalidate>
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'AUTH.SETUP_ADMIN_NAME' | translate }}</mat-label>
+          <input matInput formControlName="name" autocomplete="name" />
+          @if (adminForm.controls.name.touched && adminForm.controls.name.invalid) {
+            <mat-error>{{ 'ERRORS.FIELD_REQUIRED' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'AUTH.EMAIL' | translate }}</mat-label>
+          <input matInput type="email" formControlName="email" autocomplete="email" />
+          @if (adminForm.controls.email.touched) {
+            @if (adminForm.controls.email.hasError('required')) {
+              <mat-error>{{ 'ERRORS.FIELD_REQUIRED' | translate }}</mat-error>
+            } @else if (adminForm.controls.email.hasError('email')) {
+              <mat-error>{{ 'ERRORS.INVALID_EMAIL' | translate }}</mat-error>
+            }
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'AUTH.PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="new-password" />
+          @if (adminForm.controls.password.touched && adminForm.controls.password.hasError('minlength')) {
+            <mat-error>{{ 'ERRORS.PASSWORD_MIN' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Password strength -->
+        @if (adminForm.controls.password.value) {
+          <div class="strength-bar" [attr.aria-label]="pwStrengthLabel() | translate">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="strength-segment" [class]="i <= pwStrength() ? pwStrengthClass() : ''"></div>
+            }
+          </div>
+          <p class="strength-label" [class]="pwStrengthClass()">
+            {{ pwStrengthLabel() | translate }}
+          </p>
+        }
+
+        <mat-form-field appearance="outline" class="setup-field">
+          <mat-label>{{ 'SETUP.CONFIRM_PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password" />
+          @if (adminForm.touched && adminForm.hasError('passwordMismatch')) {
+            <mat-error>{{ 'ERRORS.PASSWORDS_MISMATCH' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <p class="setup-error" role="alert">{{ error() | translate }}</p>
+        }
+
+        <div class="setup-actions">
+          <button mat-stroked-button type="button" class="setup-btn-back" (click)="back()">
+            {{ 'SETUP.BACK' | translate }}
+          </button>
+          <button
+            mat-flat-button
+            type="submit"
+            class="setup-btn kei-btn-primary"
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              <kei-icon name="loader" [size]="16" class="setup-spinner" />
+            }
+            {{ (loading() ? 'APP.LOADING' : 'AUTH.SETUP_SUBMIT') | translate }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- ── Step 3: Done ───────────────────────────────────────────────────── -->
+    @if (step() === 3) {
+      <div class="setup-done">
+        <div class="setup-done__icon">
+          <kei-icon name="check" [size]="32" />
+        </div>
+        <h1 class="setup-title">{{ 'SETUP.DONE_TITLE' | translate }}</h1>
+        <p class="setup-done__desc">{{ 'SETUP.DONE_DESC' | translate }}</p>
+        <button mat-flat-button class="setup-btn kei-btn-primary" (click)="goToLogin()">
+          {{ 'SETUP.GO_TO_KEI' | translate }}
+        </button>
+      </div>
+    }
+
+  </div>
+</div>

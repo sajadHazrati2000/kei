@@ -84,6 +84,18 @@ func (h *Handler) HandleRefresh(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{"user": resp.UserInfo})
 }
 
+// HandleSetupStatus — GET /api/v1/auth/setup/status (public)
+// Returns {"setup_done": true/false} so the frontend can decide whether to
+// show the setup wizard or redirect to the login page.
+func (h *Handler) HandleSetupStatus(w http.ResponseWriter, r *http.Request) {
+	done, err := h.svc.IsSetupDone(r.Context())
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to check setup status", "INTERNAL_ERROR")
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]bool{"setup_done": done})
+}
+
 // HandlePasswordResetRequest — POST /api/v1/auth/password-reset/request
 // Always returns 200 to prevent user-enumeration. The reset token is included
 // in the response body so an admin can deliver it manually (no SMTP).

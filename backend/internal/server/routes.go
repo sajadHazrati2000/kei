@@ -25,9 +25,11 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("DELETE /api/v1/auth/logout", ah.HandleLogout)
 	s.mux.HandleFunc("POST /api/v1/auth/password-reset/request", ah.HandlePasswordResetRequest)
 	s.mux.HandleFunc("POST /api/v1/auth/password-reset/confirm", ah.HandlePasswordResetConfirm)
+	s.mux.HandleFunc("GET /api/v1/auth/setup/status", ah.HandleSetupStatus)
 
-	// Users
+	// Users — /me must be registered before /{id} to prevent wildcard capture
 	uh := user.NewHandler(s.userSvc)
+	s.mux.Handle("GET /api/v1/users/me", requireAuth(http.HandlerFunc(uh.HandleMe)))
 	s.mux.Handle("GET /api/v1/users", requireAuth(http.HandlerFunc(uh.HandleList)))
 	s.mux.Handle("POST /api/v1/users/invite", requireAuth(adminOnly(http.HandlerFunc(uh.HandleInvite))))
 	s.mux.Handle("GET /api/v1/users/{id}", requireAuth(http.HandlerFunc(uh.HandleGet)))
