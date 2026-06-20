@@ -1,0 +1,101 @@
+.sidebar {
+  width: var(--kei-sidebar-width);
+  min-width: var(--kei-sidebar-width);
+  height: 100%;
+  background-color: var(--kei-bg-base);
+  border-inline-end: 1px solid var(--kei-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 0;
+
+  // Sidebar is always "start" side; flex-direction on shell handles RTL flip.
+}
+
+// Logo mark
+.sidebar__logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kei-accent);
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  border-radius: var(--kei-radius-md);
+  background-color: var(--kei-accent-glow);
+  border: 1px solid var(--kei-accent-border);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+// Nav list
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  width: 100%;
+  padding: 0 6px;
+}
+
+// Nav + action buttons
+.sidebar__btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--kei-radius-md);
+  color: var(--kei-text-secondary);
+  transition: background-color var(--kei-transition), color var(--kei-transition);
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--kei-accent-glow);
+    color: var(--kei-text-primary);
+    text-decoration: none;
+  }
+
+  &--active {
+    background-color: var(--kei-accent-glow);
+    color: var(--kei-accent);
+    border: 1px solid var(--kei-accent-border);
+  }
+}
+
+// Bottom section
+.sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 0 6px 4px;
+}
+
+// User avatar button
+.sidebar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--kei-bg-overlay);
+  border: 1px solid var(--kei-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kei-text-secondary);
+  text-decoration: none;
+  transition: border-color var(--kei-transition), color var(--kei-transition);
+  margin-top: 4px;
+
+  &:hover {
+    border-color: var(--kei-accent-border);
+    color: var(--kei-accent);
+    text-decoration: none;
+  }
+}

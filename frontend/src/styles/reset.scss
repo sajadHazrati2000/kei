@@ -1,0 +1,66 @@
+// ─── Kei Base Reset ──────────────────────────────────────────────────────────
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--kei-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--kei-text-primary);
+  background-color: var(--kei-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Remove default list styles when used for navigation
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+// Improve media defaults
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+// Remove built-in form typography styles
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+a {
+  color: var(--kei-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Angular host elements should not create stacking context by default
+:host {
+  display: contents;
+}

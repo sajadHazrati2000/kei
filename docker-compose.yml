@@ -37,18 +37,29 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # Development frontend: ng serve with hot-reload via volume mount.
+  # File watching uses --poll for cross-platform compatibility on
+  # Docker Desktop (Windows/Mac host filesystems).
+  # Production build: use docker-compose.prod.yml which builds the nginx image.
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: node:20-alpine
     container_name: kei-frontend
-    environment:
-      API_URL: ${API_URL:-http://localhost:8080}
+    working_dir: /app
+    command: >
+      sh -c "npm ci --prefer-offline --silent &&
+             npx ng serve --host 0.0.0.0 --port 4200 --poll 1000 --disable-host-check"
+    volumes:
+      - ./frontend:/app
+      - kei_frontend_nm:/app/node_modules
     ports:
-      - "4200:80"
+      - "4200:4200"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
     depends_on:
       - backend
     restart: unless-stopped
 
 volumes:
   postgres_data:
+  kei_frontend_nm:

@@ -1,0 +1,38 @@
+.topbar {
+  height: var(--kei-topbar-height);
+  min-height: var(--kei-topbar-height);
+  background-color: var(--kei-bg-surface);
+  border-bottom: 1px solid var(--kei-border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  flex-shrink: 0;
+  // Content projected via ng-content sits at the end (inline-end)
+  justify-content: space-between;
+}
+
+.topbar__titles {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.topbar__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--kei-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+.topbar__subtitle {
+  font-size: 12px;
+  color: var(--kei-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

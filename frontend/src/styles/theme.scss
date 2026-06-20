@@ -1,0 +1,61 @@
+// ─── Angular Material M3 Dark Theme ─────────────────────────────────────────
+// Uses mat.$azure-palette as the primary tonal palette to match Kei's
+// GitHub-blue accent (#58A6FF). All colours are overridden via CSS custom
+// properties so every value still traces back to tokens.scss.
+
+@use '@angular/material' as mat;
+
+// Must be included exactly once per application.
+@include mat.core();
+
+$_kei-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary:    mat.$azure-palette,
+    tertiary:   mat.$blue-palette,
+  ),
+  typography: (
+    brand-family: 'Inter, system-ui, -apple-system, sans-serif',
+    plain-family: 'Inter, system-ui, -apple-system, sans-serif',
+    bold-weight:    600,
+    medium-weight:  500,
+    regular-weight: 400,
+  ),
+  density: (scale: -1),
+));
+
+html {
+  @include mat.all-component-themes($_kei-theme);
+
+  // ── Override Material system tokens with Kei design tokens ────────────────
+  // This keeps Material components visually aligned with our design system
+  // without fighting the theming engine.
+
+  // Backgrounds
+  --mat-sys-background:          var(--kei-bg-base);
+  --mat-sys-surface:             var(--kei-bg-surface);
+  --mat-sys-surface-container:   var(--kei-bg-overlay);
+  --mat-sys-surface-container-high: var(--kei-bg-card);
+
+  // Primary / accent
+  --mat-sys-primary:             var(--kei-accent);
+  --mat-sys-on-primary:          #000000;
+  --mat-sys-primary-container:   var(--kei-accent-glow);
+
+  // Text
+  --mat-sys-on-background:       var(--kei-text-primary);
+  --mat-sys-on-surface:          var(--kei-text-primary);
+  --mat-sys-on-surface-variant:  var(--kei-text-secondary);
+
+  // Outlines / dividers
+  --mat-sys-outline:             var(--kei-border);
+  --mat-sys-outline-variant:     var(--kei-border-hover);
+
+  // Form field + input specific overrides
+  --mat-form-field-container-text-color:        var(--kei-text-primary);
+  --mat-form-field-enabled-select-arrow-color:  var(--kei-text-secondary);
+
+  // App-bar (toolbar)
+  --mat-toolbar-container-background-color: var(--kei-bg-surface);
+  --mat-toolbar-container-text-color:       var(--kei-text-primary);
+}

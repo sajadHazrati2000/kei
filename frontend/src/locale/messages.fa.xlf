@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US" trgLang="fa-IR">
+  <file id="ngio-source" original="ng.template">
+    <!--
+      This file is the Angular compile-time i18n catalogue for the fa-IR locale.
+      Runtime text translation is handled by ngx-translate (public/i18n/fa.json).
+      Add $localize-tagged strings here as features are built.
+    -->
+  </file>
+</xliff>

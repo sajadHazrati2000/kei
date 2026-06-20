@@ -234,19 +234,61 @@ CORS_ORIGIN=http://localhost:4200
 
 ---
 
+## Frontend Design Tokens (styles/tokens.scss)
+
+All colours are CSS custom properties. **No hardcoded values outside tokens.scss.**
+
+| Token | Value | Usage |
+|---|---|---|
+| `--kei-bg-base` | `#0D1117` | App background, sidebar |
+| `--kei-bg-surface` | `#161B22` | Topbar, cards |
+| `--kei-bg-overlay` | `#1C2330` | Modals, dropdowns |
+| `--kei-bg-card` | `#21293A` | Elevated card surfaces |
+| `--kei-accent` | `#58A6FF` | Primary accent (GitHub blue) |
+| `--kei-accent-glow` | `rgba(88,166,255,0.12)` | Active/hover backgrounds |
+| `--kei-accent-border` | `rgba(88,166,255,0.25)` | Active/focus borders |
+| `--kei-border` | `#2A3441` | Default borders |
+| `--kei-border-hover` | `#334155` | Hover / emphasis borders |
+| `--kei-text-primary` | `#E6EDF3` | Primary text |
+| `--kei-text-secondary` | `#8B949E` | Secondary text |
+| `--kei-text-muted` | `#4A5568` | Disabled / muted text |
+| `--kei-free-bg/text` | `#1A3A2A / #2EA043` | Free slot |
+| `--kei-busy-bg/text` | `#3A1A1A / #F85149` | Busy slot |
+| `--kei-focus-bg/text` | `#1A1F3A / #58A6FF` | Focus slot |
+| `--kei-overlap-bg/text` | `#0D1A2E / #58A6FF` | Overlap highlight |
+
+## Frontend Component Architecture (Step 9+)
+
+```
+AppComponent
+  └── AppShellComponent          ← full-height flex layout
+        ├── SidebarComponent     ← 48px, #0D1117 bg, icon nav + "كي" logo
+        ├── TopbarComponent      ← 44px, #161B22 bg, [title]/[subtitle] inputs
+        └── MainContentComponent ← flex:1, scrollable, <router-outlet> inside
+```
+
+Services:
+- `KeiThemeService` — `currentLocale$` BehaviorSubject, `toggleLocale()`, applies `dir` + `lang` + ngx-translate
+- `KeiIconComponent` — renders Tabler Icons (outline) as inline SVG by name
+
+i18n:
+- Runtime switching: ngx-translate (`public/i18n/en.json`, `public/i18n/fa.json`)
+- Compile-time locale data: `@angular/localize` with `src/locale/messages.fa.xlf`
+- Locale IDs: `en-US` (source) and `fa-IR`
+
 ## What to Build Next (Phase 1 sequence)
 
 Build in this order — each step is independently testable:
 
-1. Docker Compose + PostgreSQL + migrations
-2. Go server bootstrap (config, db connection, router)
-3. Auth: setup wizard, login, JWT, refresh, logout
-4. User management: invite, list, update, role change
-5. Availability: set slots, get slots, merge adjacent, recurring templates
-6. Team dashboard API: all members' availability + overlap calculation
-7. WebSocket: real-time availability broadcast
-8. Settings: working hours, blocked days
-9. Angular: project scaffold + i18n + RTL setup
+1. ✅ Docker Compose + PostgreSQL + migrations
+2. ✅ Go server bootstrap (config, db connection, router)
+3. ✅ Auth: setup wizard, login, JWT, refresh, logout, password reset
+4. ✅ User management: invite, list, update, role change
+5. ✅ Availability: set slots, get slots, merge adjacent, recurring templates
+6. ✅ Team dashboard API: all members' availability + overlap calculation
+7. ✅ WebSocket: real-time availability broadcast
+8. ✅ Settings: working hours, blocked days
+9. ✅ Angular: project scaffold + i18n + RTL setup (this session)
 10. Angular: auth pages (login, setup wizard)
 11. Angular: availability grid component
 12. Angular: team dashboard
@@ -266,5 +308,6 @@ At the start of every Claude Code session:
 
 ---
 
-*Last updated: Phase 1 kickoff*  
+*Last updated: Step 9 complete — Angular scaffold, design system, shell layout, KeiThemeService, i18n, RTL*  
+*Next: Step 10 — Angular auth pages (login + setup wizard)*  
 *Next phase: Phase 2 — Meeting Proposals (do not start until Phase 1 is fully tested)*

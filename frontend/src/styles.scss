@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+// ─── Global Entry Point ───────────────────────────────────────────────────────
+// Import order matters: tokens first (defines CSS variables), then the
+// Material theme (uses those variables), then the base reset.
+
+@use 'styles/tokens';
+@use 'styles/theme';
+@use 'styles/reset';
